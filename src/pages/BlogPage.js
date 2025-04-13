@@ -26,16 +26,27 @@ const BlogPage = () => {
       document.body.style.margin = '0';
       document.body.style.padding = '0';
       document.body.style.background = 'transparent';
+      
       // Add meta tags for better Discord embed appearance
       const metaTags = [
         { property: 'theme-color', content: '#3f51b5' },
         { property: 'og:site_name', content: 'JayMakesVideos Blog' },
-        { property: 'og:image', content: 'https://ui-avatars.com/api/?name=Jay%20B&background=random&size=200' }
+        { property: 'og:image', content: 'https://ui-avatars.com/api/?name=Jay%20B&background=random&size=200' },
+        { property: 'og:title', content: id ? blogPosts.find(post => post.id === parseInt(id))?.title || 'JayMakesVideos Blog' : 'JayMakesVideos Blog' },
+        { property: 'og:description', content: id ? blogPosts.find(post => post.id === parseInt(id))?.excerpt || 'A place for sharing thoughts and experiences' : 'A place for sharing thoughts and experiences' },
+        { property: 'og:type', content: id ? 'article' : 'website' },
+        { name: 'twitter:card', content: 'summary' },
+        { name: 'twitter:title', content: id ? blogPosts.find(post => post.id === parseInt(id))?.title || 'JayMakesVideos Blog' : 'JayMakesVideos Blog' },
+        { name: 'twitter:description', content: id ? blogPosts.find(post => post.id === parseInt(id))?.excerpt || 'A place for sharing thoughts and experiences' : 'A place for sharing thoughts and experiences' }
       ];
       
       metaTags.forEach(tag => {
         const meta = document.createElement('meta');
-        meta.setAttribute('property', tag.property);
+        if (tag.property) {
+          meta.setAttribute('property', tag.property);
+        } else if (tag.name) {
+          meta.setAttribute('name', tag.name);
+        }
         meta.setAttribute('content', tag.content);
         document.head.appendChild(meta);
       });
@@ -52,7 +63,7 @@ const BlogPage = () => {
         });
       }
     };
-  }, [isEmbedded]);
+  }, [isEmbedded, id]);
 
   // If there's an ID parameter, show the individual post view
   if (id) {
