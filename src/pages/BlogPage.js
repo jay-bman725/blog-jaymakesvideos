@@ -28,16 +28,22 @@ const BlogPage = () => {
       document.body.style.background = 'transparent';
       
       // Add meta tags for better Discord embed appearance
+      const currentPost = id ? blogPosts.find(post => post.id === parseInt(id)) : null;
+      const formattedTags = currentPost?.tags ? currentPost.tags.join(', ') : '';
+      const embedDescription = currentPost
+        ? `${currentPost.title}\n\nPosted on: ${currentPost.date}\n\nExcerpt: ${currentPost.excerpt}\n\nTags: ${formattedTags}\n\nClick the link to see the full blog!`
+        : 'A place for sharing thoughts and experiences';
+
       const metaTags = [
         { property: 'theme-color', content: '#3f51b5' },
         { property: 'og:site_name', content: 'JayMakesVideos Blog' },
         { property: 'og:image', content: 'https://ui-avatars.com/api/?name=Jay%20B&background=random&size=200' },
-        { property: 'og:title', content: id ? blogPosts.find(post => post.id === parseInt(id))?.title || 'JayMakesVideos Blog' : 'JayMakesVideos Blog' },
-        { property: 'og:description', content: id ? blogPosts.find(post => post.id === parseInt(id))?.excerpt || 'A place for sharing thoughts and experiences' : 'A place for sharing thoughts and experiences' },
-        { property: 'og:type', content: id ? 'article' : 'website' },
+        { property: 'og:title', content: currentPost?.title || 'JayMakesVideos Blog' },
+        { property: 'og:description', content: embedDescription },
+        { property: 'og:type', content: currentPost ? 'article' : 'website' },
         { name: 'twitter:card', content: 'summary' },
-        { name: 'twitter:title', content: id ? blogPosts.find(post => post.id === parseInt(id))?.title || 'JayMakesVideos Blog' : 'JayMakesVideos Blog' },
-        { name: 'twitter:description', content: id ? blogPosts.find(post => post.id === parseInt(id))?.excerpt || 'A place for sharing thoughts and experiences' : 'A place for sharing thoughts and experiences' }
+        { name: 'twitter:title', content: currentPost?.title || 'JayMakesVideos Blog' },
+        { name: 'twitter:description', content: embedDescription }
       ];
       
       metaTags.forEach(tag => {
